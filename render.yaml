@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: photobooth-backend
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: "*"
+      - key: FACE_MATCH_THRESHOLD
+        value: "0.6"
