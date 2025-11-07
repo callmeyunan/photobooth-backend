@@ -63,9 +63,18 @@ def extract_folder_id(folder_url_or_id: str) -> str:
     return m.group(1)
 
 
-def list_image_files_in_folder(service, folder_id: str) -> List[dict]:
+def list_image_files_in_folder(service, folder_or_file_id: str) -> List[dict]:
+    # Kalau ID-nya file, langsung return satu elemen
+    try:
+        file = service.files().get(fileId=folder_or_file_id, fields="id, name, mimeType").execute()
+        if file["mimeType"].startswith("image/"):
+            return [file]
+    except Exception:
+        pass
+
+    # Kalau bukan file, baru anggap folder
     query = (
-        f"'{folder_id}' in parents and "
+        f"'{folder_or_file_id}' in parents and "
         "mimeType contains 'image/' and "
         "trashed = false"
     )
